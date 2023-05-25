@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth'
+import NextAuth, { Account, Profile, User } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import GitHubProvider from 'next-auth/providers/github'
 import DiscordProvider from 'next-auth/providers/discord'
@@ -7,6 +7,8 @@ import FacebookProvider from 'next-auth/providers/facebook'
 import Auth0Provider from 'next-auth/providers/auth0'
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
 import clientPromise from '@/lib/mongodb'
+import { JWT } from 'next-auth/jwt'
+import { Adapter } from 'next-auth/adapters'
 
 export default NextAuth({
   adapter: MongoDBAdapter(clientPromise),
@@ -40,4 +42,31 @@ export default NextAuth({
     // Passwordless / email sign in
   ],
   secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: 'jwt',
+  },
+  callbacks: {
+    async jwt({
+      token,
+      user,
+      account,
+      profile,
+    }: {
+      token: JWT
+      user?: User | Adapter | null
+      account?: Account | null
+      profile?: Profile | null
+    }) {
+      if (user) {
+        token.provider = account?.provider as string
+      }
+      return token
+    },
+    async session({ session, token }: { session: any; token: JWT }) {
+      if (session.user) {
+        session.user.provider = token.provider
+      }
+      return session
+    },
+  },
 })

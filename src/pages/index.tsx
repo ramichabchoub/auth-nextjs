@@ -20,6 +20,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold underline">
             {session.user?.email}
           </h2>
+          <span className="flex">Provider: {session.user?.provider}</span>
           <button onClick={() => signOut()} className="bg-blue-500">
             Sign out
           </button>
