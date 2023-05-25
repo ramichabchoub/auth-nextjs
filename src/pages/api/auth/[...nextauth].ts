@@ -3,7 +3,7 @@ import GoogleProvider from 'next-auth/providers/google'
 import GitHubProvider from 'next-auth/providers/github'
 import DiscordProvider from 'next-auth/providers/discord'
 // import TwitterProvider from 'next-auth/providers/twitter'
-// import FacebookProvider from 'next-auth/providers/facebook'
+import FacebookProvider from 'next-auth/providers/facebook'
 
 export default NextAuth({
   providers: [
@@ -24,10 +24,10 @@ export default NextAuth({
     //   clientId: process.env.TWITTER_ID as string,
     //   clientSecret: process.env.TWITTER_SECRET as string,
     // }),
-    // FacebookProvider({
-    //   clientId: process.env.FACEBOOK_ID as string,
-    //   clientSecret: process.env.FACEBOOK_SECRET as string,
-    // }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_ID as string,
+      clientSecret: process.env.FACEBOOK_SECRET as string,
+    }),
     // Passwordless / email sign in
   ],
   secret: process.env.NEXTAUTH_SECRET,
